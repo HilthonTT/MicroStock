@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Common/">
+    <Project Path="src/Common/MicroStock.Common.Application/MicroStock.Common.Application.csproj" />
+    <Project Path="src/Common/MicroStock.Common.Domain/MicroStock.Common.Domain.csproj" />
+    <Project Path="src/Common/MicroStock.Common.Infrastructure/MicroStock.Common.Infrastructure.csproj" />
+  </Folder>
+</Solution>
