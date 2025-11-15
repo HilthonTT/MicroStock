@@ -1,0 +1,123 @@
+﻿using Dapper;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MicroStock.Common.Application.Data;
+using MicroStock.Common.Application.EventBus;
+using MicroStock.Common.Domain;
+using MicroStock.Common.Infrastructure.Inbox;
+using MicroStock.Common.Infrastructure.Serialization;
+using Newtonsoft.Json;
+using Quartz;
+using System.Data;
+using System.Data.Common;
+
+namespace Modules.Users.Infrastructure.Inbox;
+
+[DisallowConcurrentExecution]
+internal sealed class ProcessInboxJob(
+    IDbConnectionFactory dbConnectionFactory,
+    IServiceScopeFactory serviceScopeFactory,
+    IDateTimeProvider dateTimeProvider,
+    IOptions<InboxOptions> inboxOptions,
+    ILogger<ProcessInboxJob> logger) : IJob
+{
+    private const string ModuleName = "Users";
+
+    public async Task Execute(IJobExecutionContext context)
+    {
+        logger.LogInformation("{Module} - Beginning to process inbox messages", ModuleName);
+
+        await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
+        await using DbTransaction transaction = await connection.BeginTransactionAsync();
+
+        IReadOnlyList<InboxMessageResponse> inboxMessages = await GetUnprocessedInboxMessagesAsync(connection, transaction);
+
+        foreach (InboxMessageResponse inboxMessage in inboxMessages)
+        {
+            Exception? exception = null;
+            try
+            {
+                IIntegrationEvent integrationEvent = JsonConvert.DeserializeObject<IIntegrationEvent>(
+                    inboxMessage.Content, 
+                    SerializerSettings.Instance)!;
+
+                await PublishIntegrationEvent(integrationEvent, context.CancellationToken);
+            }
+            catch (Exception caughtException)
+            {
+                logger.LogError(caughtException, "{Module} - Exception while processing inbox message {MessageId}", ModuleName, inboxMessage.Id);
+
+                exception = caughtException;
+            }
+
+            await UpdateInboxMessageAsync(connection, transaction, inboxMessage, exception);
+        }
+
+        await transaction.CommitAsync();
+
+        logger.LogInformation("{Module} - Completed processing inbox messages", ModuleName);
+    }
+
+    private async Task PublishIntegrationEvent(IIntegrationEvent integrationEvent, CancellationToken cancellationToken)
+    {
+        using IServiceScope scope = serviceScopeFactory.CreateScope();
+
+        IEnumerable<IIntegrationEventHandler> integrationEventHandlers = IntegrationEventHandlersFactory.GetHandlers(
+            integrationEvent.GetType(),
+            scope.ServiceProvider,
+            Presentation.AssemblyReference.Assembly);
+
+        foreach (IIntegrationEventHandler integrationEventHandler in integrationEventHandlers)
+        {
+            await integrationEventHandler.Handle(integrationEvent, cancellationToken);
+        }
+    }
+
+    private async Task<IReadOnlyList<InboxMessageResponse>> GetUnprocessedInboxMessagesAsync(
+        IDbConnection connection,
+        IDbTransaction transaction)
+    {
+        string sql =
+            $"""
+             SELECT
+                id AS {nameof(InboxMessageResponse.Id)},
+                content AS {nameof(InboxMessageResponse.Content)}
+             FROM users.inbox_messages
+             WHERE processed_at_utc IS NULL
+             ORDER BY occurred_at_utc
+             LIMIT {inboxOptions.Value.BatchSize}
+             FOR UPDATE
+             """;
+
+        var inboxMessages = await connection.QueryAsync<InboxMessageResponse>(sql, transaction: transaction);
+
+        return inboxMessages.ToList();
+    }
+
+    private async Task UpdateInboxMessageAsync(
+        IDbConnection connection,
+        IDbTransaction transaction,
+        InboxMessageResponse inboxMessage,
+        Exception? exception)
+    {
+        const string sql =
+            """
+            UPDATE users.inbox_messages
+            SET processed_at_utc = @ProcessedAtUtc,
+               error = @Error
+            WHERE id = @Id
+            """;
+
+        await connection.ExecuteAsync(
+            sql,
+            new
+            {
+                inboxMessage.Id,
+                ProcessedAtUtc = dateTimeProvider.UtcNow,
+                Error = exception?.Message
+            }, transaction: transaction);
+    }
+
+    private sealed record InboxMessageResponse(Guid Id, string Content);
+}

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MicroStock.Common.Infrastructure.Inbox;
 
-internal sealed class InboxMessageConsumerConfiguration : IEntityTypeConfiguration<InboxMessageConsumer>
+public sealed class InboxMessageConsumerConfiguration : IEntityTypeConfiguration<InboxMessageConsumer>
 {
     public void Configure(EntityTypeBuilder<InboxMessageConsumer> builder)
     {

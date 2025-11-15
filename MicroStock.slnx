@@ -4,5 +4,13 @@
     <Project Path="src/Common/MicroStock.Common.Application/MicroStock.Common.Application.csproj" />
     <Project Path="src/Common/MicroStock.Common.Domain/MicroStock.Common.Domain.csproj" />
     <Project Path="src/Common/MicroStock.Common.Infrastructure/MicroStock.Common.Infrastructure.csproj" />
+    <Project Path="src/Common/MicroStock.Common.Presentation/MicroStock.Common.Presentation.csproj" Id="37a0c3cc-5d38-4235-aa71-886f2c7b58cd" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Users/">
+    <Project Path="src/Modules/Users/Modules.Users.Application/Modules.Users.Application.csproj" Id="af2ef441-2d5a-4588-9637-5d0bb5e4fb9a" />
+    <Project Path="src/Modules/Users/Modules.Users.Domain/Modules.Users.Domain.csproj" Id="1f998245-3548-459a-832d-7c13426ac5eb" />
+    <Project Path="src/Modules/Users/Modules.Users.Infrastructure/Modules.Users.Infrastructure.csproj" Id="6cfb6aaa-9dfd-439e-a606-ecb513bd9d1d" />
+    <Project Path="src/Modules/Users/Modules.Users.Presentation/Modules.Users.Presentation.csproj" Id="122d56a2-9d2b-421c-9266-84f55710912c" />
   </Folder>
 </Solution>
