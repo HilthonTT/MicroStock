@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using MicroStock.Common.Application.Authentication;
 using MicroStock.Common.Domain;
-using MicroStock.Common.Infrastructure.Authentication;
 using Modules.Users.Application.Abstractions.Authentication;
 using System.Security.Claims;
 using System.Security.Cryptography;

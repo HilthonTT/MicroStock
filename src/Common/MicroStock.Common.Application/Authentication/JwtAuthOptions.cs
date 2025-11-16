@@ -1,4 +1,4 @@
-﻿namespace MicroStock.Common.Infrastructure.Authentication;
+﻿namespace MicroStock.Common.Application.Authentication;
 
 public sealed class JwtAuthOptions
 {

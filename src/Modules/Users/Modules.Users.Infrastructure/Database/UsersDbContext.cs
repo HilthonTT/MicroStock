@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MicroStock.Common.Infrastructure.Database;
+using Modules.Users.Application.Abstractions.Data;
 using Modules.Users.Domain.Entities;
 
 namespace Modules.Users.Infrastructure.Database;
 
-public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : DbContext(options)
+public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : DbContext(options), IDbContext
 {
     public DbSet<User> Users { get; set; }
 

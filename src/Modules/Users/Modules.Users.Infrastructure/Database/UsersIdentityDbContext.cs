@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MicroStock.Common.Infrastructure.Database;
+using Modules.Users.Application.Abstractions.Data;
 using Modules.Users.Domain.Entities;
 
 namespace Modules.Users.Infrastructure.Database;
 
 public sealed class UsersIdentityDbContext(DbContextOptions<UsersIdentityDbContext> options) 
-    : IdentityDbContext(options)
+    : IdentityDbContext(options), IIdentityDbContext
 {
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 

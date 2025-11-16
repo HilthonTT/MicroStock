@@ -11,6 +11,7 @@ using MicroStock.Common.Infrastructure.Authorization;
 using MicroStock.Common.Infrastructure.Caching;
 using MicroStock.Common.Infrastructure.Cors;
 using MicroStock.Common.Infrastructure.Data;
+using MicroStock.Common.Infrastructure.Origin;
 using MicroStock.Common.Infrastructure.Outbox;
 using MicroStock.Common.Infrastructure.Time;
 using Npgsql;
@@ -83,6 +84,9 @@ public static class InfrastructureConfiguration
                 config.ConfigureEndpoints(context);
             });
         });
+
+        services.ConfigureOptions<CorsConfigureOptions>();
+        services.ConfigureOptions<OriginConfigureOptions>();
 
         return services;
     }

@@ -38,4 +38,10 @@ public sealed class RefreshToken : Entity
 
         return rf;
     }
+
+    public void Refresh(string newToken, DateTime newExpiresAtUtc)
+    {
+        Token = newToken;
+        ExpiresAtUtc = newExpiresAtUtc;
+    }
 }

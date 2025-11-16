@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using MicroStock.Common.Application.Authentication;
 using System.Text;
 
 namespace MicroStock.Common.Infrastructure.Authentication;

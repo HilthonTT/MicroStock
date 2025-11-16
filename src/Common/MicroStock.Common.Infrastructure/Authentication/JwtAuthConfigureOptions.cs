@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using MicroStock.Common.Application.Authentication;
 
 namespace MicroStock.Common.Infrastructure.Authentication;
 

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\MicroStock.Common.Presentation\MicroStock.Common.Presentation.csproj" />
+  </ItemGroup>
+
 </Project>
