@@ -13,6 +13,8 @@ using MicroStock.Common.Infrastructure.Cors;
 using MicroStock.Common.Infrastructure.Data;
 using MicroStock.Common.Infrastructure.Origin;
 using MicroStock.Common.Infrastructure.Outbox;
+using MicroStock.Common.Infrastructure.RateLimit;
+using MicroStock.Common.Infrastructure.SecurityHeaders;
 using MicroStock.Common.Infrastructure.Time;
 using Npgsql;
 using Quartz;
@@ -31,6 +33,8 @@ public static class InfrastructureConfiguration
         services.AddAuthorizationInternal();
         services.AddAuthenticationInternal();
         services.AddCorsInternal();
+        services.AddSecurityHeaders();
+        services.ConfigureRateLimit();
 
         services.AddAuditing();
 
