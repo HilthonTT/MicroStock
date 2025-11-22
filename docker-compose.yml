@@ -1,0 +1,6 @@
+services:
+  microstock.api:
+    image: ${DOCKER_REGISTRY-}microstockapi
+    build:
+      context: .
+      dockerfile: src/Api/MicroStock.Api/Dockerfile

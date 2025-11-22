@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MicroStock.Common.Application.Authentication;
 using System.Text;
@@ -12,8 +13,10 @@ internal static class AuthenticationExtensions
     {
         services.AddHttpContextAccessor();
 
-        services.ConfigureOptions<JwtAuthOptions>();
-        JwtAuthOptions jwtAuthOptions = services.BuildServiceProvider().GetRequiredService<JwtAuthOptions>();
+        services.ConfigureOptions<JwtAuthConfigureOptions>();
+
+        using ServiceProvider sp = services.BuildServiceProvider();
+        JwtAuthOptions jwtAuthOptions = sp.GetRequiredService<IOptions<JwtAuthOptions>>().Value;
 
         services
             .AddAuthentication(options =>
@@ -30,6 +33,8 @@ internal static class AuthenticationExtensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtAuthOptions.Key))
                 };
             });
+
+        services.AddAuthorization();
 
         return services;
     }

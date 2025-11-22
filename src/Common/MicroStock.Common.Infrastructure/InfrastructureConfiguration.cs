@@ -1,9 +1,12 @@
 ﻿using MassTransit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MicroStock.Common.Application.Caching;
 using MicroStock.Common.Application.Data;
+using MicroStock.Common.Application.ETag;
 using MicroStock.Common.Application.EventBus;
+using MicroStock.Common.Application.Mail;
 using MicroStock.Common.Domain;
 using MicroStock.Common.Infrastructure.Auditing;
 using MicroStock.Common.Infrastructure.Authentication;
@@ -11,6 +14,8 @@ using MicroStock.Common.Infrastructure.Authorization;
 using MicroStock.Common.Infrastructure.Caching;
 using MicroStock.Common.Infrastructure.Cors;
 using MicroStock.Common.Infrastructure.Data;
+using MicroStock.Common.Infrastructure.ETag;
+using MicroStock.Common.Infrastructure.Mail;
 using MicroStock.Common.Infrastructure.Origin;
 using MicroStock.Common.Infrastructure.Outbox;
 using MicroStock.Common.Infrastructure.RateLimit;
@@ -26,6 +31,7 @@ public static class InfrastructureConfiguration
 {
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
+        IConfiguration configuration,
         Action<IRegistrationConfigurator>[] moduleConfigureConsumers,
         string databaseConnectionString,
         string cacheConnectionString)
@@ -34,7 +40,7 @@ public static class InfrastructureConfiguration
         services.AddAuthenticationInternal();
         services.AddCorsInternal();
         services.AddSecurityHeaders();
-        services.ConfigureRateLimit();
+        services.ConfigureRateLimit(configuration);
 
         services.AddAuditing();
 
@@ -91,6 +97,11 @@ public static class InfrastructureConfiguration
 
         services.ConfigureOptions<CorsConfigureOptions>();
         services.ConfigureOptions<OriginConfigureOptions>();
+
+        services.AddSingleton<IETagStore, InMemoryETagStore>();
+
+        services.ConfigureOptions<MailConfigureOptions>();
+        services.AddTransient<IMailService, MailService>();
 
         return services;
     }

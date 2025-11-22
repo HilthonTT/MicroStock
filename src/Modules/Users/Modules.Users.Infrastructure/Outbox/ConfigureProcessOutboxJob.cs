@@ -4,6 +4,7 @@ using Quartz;
 namespace Modules.Users.Infrastructure.Outbox;
 
 internal sealed class ConfigureProcessOutboxJob(IOptions<OutboxOptions> outboxOptions)
+    : IConfigureOptions<QuartzOptions>
 {
     private readonly OutboxOptions _outboxOptions = outboxOptions.Value;
 

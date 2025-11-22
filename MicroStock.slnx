@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/src/" />
+  <Folder Name="/src/Api/">
+    <Project Path="src/Api/MicroStock.Api/MicroStock.Api.csproj" Id="a9a80937-3b05-42fb-8279-ffc98d75ff1a" />
+  </Folder>
   <Folder Name="/src/Common/">
     <Project Path="src/Common/MicroStock.Common.Application/MicroStock.Common.Application.csproj" />
     <Project Path="src/Common/MicroStock.Common.Domain/MicroStock.Common.Domain.csproj" />
@@ -13,4 +16,8 @@
     <Project Path="src/Modules/Users/Modules.Users.Infrastructure/Modules.Users.Infrastructure.csproj" Id="6cfb6aaa-9dfd-439e-a606-ecb513bd9d1d" />
     <Project Path="src/Modules/Users/Modules.Users.Presentation/Modules.Users.Presentation.csproj" Id="122d56a2-9d2b-421c-9266-84f55710912c" />
   </Folder>
+  <Folder Name="/src/Web/" />
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
 </Solution>
