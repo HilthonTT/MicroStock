@@ -22,4 +22,15 @@ public static class Postgres
                     serviceProvider.GetRequiredService<InsertOutboxMessagesInterceptor>(),
                     serviceProvider.GetRequiredService<WriteAuditLogInterceptor>());
         };
+
+    public static Action<IServiceProvider, DbContextOptionsBuilder> IdentityOptions(IConfiguration configuration, string schema) =>
+        (serviceProvider, options) =>
+        {
+            options.UseNpgsql(
+                    configuration.GetConnectionString("Database")!,
+                    optionsBuilder =>
+                    {
+                        optionsBuilder.MigrationsHistoryTable(HistoryRepository.DefaultTableName, schema);
+                    }).UseSnakeCaseNamingConvention();
+        };
 }

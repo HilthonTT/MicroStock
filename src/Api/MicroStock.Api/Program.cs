@@ -1,5 +1,6 @@
 using MicroStock.Api.Extensions;
 using MicroStock.Common.Presentation.Endpoints;
+using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -25,9 +26,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 
     app.MapOpenApi();
+
+    await app.ApplyMigrations();
+    await app.SeedInitialDataAsync();
 }
 
 app.MapEndpoints();
+
+app.UseRequestContextLogging();
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
@@ -40,5 +48,7 @@ app.UseRateLimiter();
 
 app.UseUserContextEnrichment();
 app.UseETag();
+
+app.UseStatusCodePages();
 
 await app.RunAsync();

@@ -2,15 +2,22 @@
 
 namespace MicroStock.Api.Extensions;
 
-public static class MiddlewareExtensions
+internal static class MiddlewareExtensions
 {
-    public static IApplicationBuilder UseETag(this IApplicationBuilder app)
+    internal static IApplicationBuilder UseETag(this IApplicationBuilder app)
     {
         return app.UseMiddleware<ETagMiddleware>();
     }
 
-    public static IApplicationBuilder UseUserContextEnrichment(this IApplicationBuilder app)
+    internal static IApplicationBuilder UseUserContextEnrichment(this IApplicationBuilder app)
     {
         return app.UseMiddleware<UserContextEnrichmentMiddleware>();
+    }
+
+    internal static IApplicationBuilder UseRequestContextLogging(this IApplicationBuilder app)
+    {
+        app.UseMiddleware<RequestContextLoggingMiddleware>();
+
+        return app;
     }
 }

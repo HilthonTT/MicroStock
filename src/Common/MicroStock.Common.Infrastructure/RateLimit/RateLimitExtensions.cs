@@ -10,7 +10,7 @@ using System.Threading.RateLimiting;
 
 namespace MicroStock.Common.Infrastructure.RateLimit;
 
-public static class RateLimitExtensions
+internal static class RateLimitExtensions
 {
     internal static IServiceCollection ConfigureRateLimit(this IServiceCollection services, IConfiguration config)
     {

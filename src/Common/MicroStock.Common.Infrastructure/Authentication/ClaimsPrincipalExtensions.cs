@@ -7,17 +7,16 @@ public static class ClaimsPrincipalExtensions
 {
     public static Guid GetUserId(this ClaimsPrincipal? principal)
     {
-        var userId = principal?.FindFirstValue(CustomClaims.Sub);
+        string? userId = principal?.FindFirstValue(CustomClaims.Sub);
 
         return Guid.TryParse(userId, out var parsedUserId)
             ? parsedUserId
             : throw new MicroStockException("User identifier is unavailable");
     }
 
-    public static string GetIdentityId(this ClaimsPrincipal? principal)
+    public static string? GetIdentityId(this ClaimsPrincipal? principal)
     {
-        return principal?.FindFirstValue(ClaimTypes.NameIdentifier) ??
-               throw new MicroStockException("User identity is unavailable");
+        return principal?.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 
     public static HashSet<string> GetPermissions(this ClaimsPrincipal? principal)

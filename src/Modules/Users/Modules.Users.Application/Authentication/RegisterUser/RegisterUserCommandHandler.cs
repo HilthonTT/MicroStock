@@ -32,13 +32,26 @@ internal sealed class RegisterUserCommandHandler(
         var identityUser = new IdentityUser
         {
             Email = command.Email,
-            UserName = $"{command.FirstName} {command.LastName}",
+            UserName = command.Email,
         };
 
         IdentityResult createUserResult = await userManager.CreateAsync(identityUser, command.Password);
 
         if (!createUserResult.Succeeded)
         {
+            bool emailAlreadyExists = createUserResult.Errors.Any(e =>
+                e.Code == nameof(IdentityErrorDescriber.DuplicateEmail) ||
+                e.Code == "DuplicateEmail");
+
+            bool usernameAlreadyExists = createUserResult.Errors.Any(e =>
+                e.Code == nameof(IdentityErrorDescriber.DuplicateUserName) ||
+                e.Code == "DuplicateUserName");
+
+            if (emailAlreadyExists || usernameAlreadyExists)
+            {
+                return Result.Failure<AccessTokensDto>(AuthErrors.AlreadyRegistered);
+            }
+
             return Result.Failure<AccessTokensDto>(AuthErrors.UnableToRegister);
         }
 

@@ -60,7 +60,7 @@ public static class UsersModule
             .AddEntityFrameworkStores<UsersIdentityDbContext>();
 
         services
-            .AddDbContext<UsersIdentityDbContext>(Postgres.StandardOptions(configuration, Schemas.Identity))
+            .AddDbContext<UsersIdentityDbContext>(Postgres.IdentityOptions(configuration, Schemas.Identity))
             .AddScoped<IIdentityDbContext>(sp => sp.GetRequiredService<UsersIdentityDbContext>());
 
         services.AddScoped<IUserContext, UserContext>();

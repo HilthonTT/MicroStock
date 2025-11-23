@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\MicroStock.Common.Presentation\MicroStock.Common.Presentation.csproj" />
+    <ProjectReference Include="..\Modules.Users.Application\Modules.Users.Application.csproj" />
   </ItemGroup>
 
 </Project>

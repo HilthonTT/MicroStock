@@ -10,5 +10,9 @@ public static class AuthErrors
 
     public static readonly Error Unauthorized = Error.Authorization(
         "Auth.Unauthorized",
-        "You are unauthorized");        
+        "You are unauthorized");
+
+    public static readonly Error AlreadyRegistered = Error.Conflict(
+        "Auth.AlreadyRegistered",
+        "You are already registered");
 }
