@@ -9,4 +9,7 @@ public static class UserErrors
 
     public static Error NotFound(string identityId) =>
         Error.NotFound("Users.NotFound", $"The user with the IDP identifier {identityId} not found.");
+
+    public static Error NotFoundEmail(string email) =>
+        Error.NotFound("Users.NotFound", $"The user with the email {email} not found.");
 }

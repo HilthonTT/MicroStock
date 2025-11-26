@@ -1,15 +1,23 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MicroStock.Common.Application.EventBus;
 using MicroStock.Common.Application.Messaging;
 using Modules.Users.Domain.DomainEvents;
+using Modules.Users.IntegrationEvents;
 
 namespace Modules.Users.Application.Authentication.RegisterUser;
 
-internal sealed class UserCreatedDomainEventHandler(ILogger<UserCreatedDomainEventHandler> logger) 
+internal sealed class UserCreatedDomainEventHandler(IEventBus eventBus) 
     : DomainEventHandler<UserCreatedDomainEvent>
 {
-    public override Task Handle(UserCreatedDomainEvent domainEvent, CancellationToken cancellationToken = default)
+    public override async Task Handle(UserCreatedDomainEvent domainEvent, CancellationToken cancellationToken = default)
     {
-        logger.LogInformation("User created with email: '{Email}'", domainEvent.Email);
-        return Task.CompletedTask;
+        await eventBus.PublishAsync(
+            new UserCreatedIntegrationEvent(
+                domainEvent.Id,
+                domainEvent.OccurredAtUtc,
+                domainEvent.UserId,
+                domainEvent.Email,
+                domainEvent.FirstName,
+                domainEvent.LastName),
+            cancellationToken);
     }
 }

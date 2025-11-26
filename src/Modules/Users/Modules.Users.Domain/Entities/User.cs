@@ -40,7 +40,7 @@ public sealed class User : Entity
             CreatedAtUtc = createdAtUtc
         };
 
-        user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id, user.Email));
+        user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id, user.Email, user.FirstName, user.LastName));
 
         return user;
     }
@@ -49,5 +49,12 @@ public sealed class User : Entity
     {
         FirstName = firstName;
         LastName = lastName;
+        RaiseDomainEvent(new UserNameUpdatedDomainEvent(Id, firstName, lastName));
+    }
+
+    public void UpdateEmail(string email)
+    {
+        Email = email;
+        RaiseDomainEvent(new UserEmailUpdatedDomainEvent(Id, Email));
     }
 }

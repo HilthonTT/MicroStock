@@ -25,6 +25,10 @@ internal sealed class LoginUser : IEndpoint
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
+        .AllowAnonymous()
+        .Produces<AccessTokensDto>(StatusCodes.Status200OK)
+        .Produces(StatusCodes.Status401Unauthorized)
+        .Produces(StatusCodes.Status404NotFound)
         .WithTags(Tags.Authentication);
     }
 

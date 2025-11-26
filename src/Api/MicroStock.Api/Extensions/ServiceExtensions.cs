@@ -1,4 +1,5 @@
-﻿using MicroStock.Api.Middleware;
+﻿using Microsoft.OpenApi;
+using MicroStock.Api.Middleware;
 using MicroStock.Common.Application;
 using MicroStock.Common.Infrastructure;
 using Modules.Users.Infrastructure;
@@ -29,6 +30,16 @@ internal static class ServiceExtensions
         services.AddSwaggerGen(options =>
         {
             options.CustomSchemaIds(t => t.FullName?.Replace("+", "."));
+
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+            });
         });
 
         return services;

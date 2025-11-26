@@ -6,46 +6,33 @@ using MicroStock.Common.Domain;
 using MicroStock.Common.Presentation.ApiResults;
 using MicroStock.Common.Presentation.Endpoints;
 using Modules.Users.Application.Abstractions.Authentication;
-using Modules.Users.Application.Authentication.RegisterUser;
+using Modules.Users.Application.Authentication.RefreshToken;
 
 namespace Modules.Users.Presentation.Authentication;
 
-internal sealed class RegisterUser : IEndpoint
+internal sealed class Refresh : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/auth/register", async (
+        app.MapPost("auth/refresh", async (
             Request request,
-            ICommandHandler <RegisterUserCommand, AccessTokensDto> handler,
+            ICommandHandler<RefreshTokenCommand, AccessTokensDto> handler,
             CancellationToken cancellationToken) =>
         {
             Result<AccessTokensDto> result = await handler.Handle(
-                new RegisterUserCommand(
-                    request.Email,
-                    request.FirstName,
-                    request.LastName,
-                    request.Password,
-                    request.ConfirmPassword),
+                new RefreshTokenCommand(request.RefreshToken), 
                 cancellationToken);
 
             return result.Match(Results.Ok, ApiResults.Problem);
         })
-        .AllowAnonymous()
         .Produces<AccessTokensDto>(StatusCodes.Status200OK)
-        .Produces(StatusCodes.Status409Conflict)
+        .Produces(StatusCodes.Status401Unauthorized)
+        .AllowAnonymous()
         .WithTags(Tags.Authentication);
     }
 
     private sealed record Request
     {
-        public required string Email { get; init; }
-
-        public required string FirstName { get; init; }
-
-        public required string LastName { get; init; }
-
-        public required string Password { get; init; }
-
-        public required string ConfirmPassword { get; init; }
+        public required string RefreshToken { get; init; }
     }
 }

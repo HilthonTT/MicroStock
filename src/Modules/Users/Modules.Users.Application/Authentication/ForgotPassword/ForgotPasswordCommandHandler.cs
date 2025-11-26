@@ -29,7 +29,7 @@ internal sealed class ForgotPasswordCommandHandler(
         string token = await userManager.GeneratePasswordResetTokenAsync(identityUser);
         token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-        string resetPasswordUri = $"{_originOptions.OriginUrl}/reset-password?token={token}&email={command.Email}";
+        string resetPasswordUri = $"{_originOptions.OriginUrl}/auth/reset-password?token={token}&email={command.Email}";
         var mailRequest = new MailRequest(
             [identityUser.Email!],
             "Reset Password",
