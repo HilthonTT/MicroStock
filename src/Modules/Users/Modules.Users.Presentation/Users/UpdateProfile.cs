@@ -15,7 +15,7 @@ internal sealed class UpdateProfile : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("me", async (
+        app.MapPut("users/me", async (
             Request request,
             IUserContext userContext,
             ICommandHandler<UpdateUserCommand> handler,

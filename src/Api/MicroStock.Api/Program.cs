@@ -4,6 +4,8 @@ using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 builder.AddLogging();
 
 builder.Configuration.AddModuleConfiguration([
@@ -20,6 +22,8 @@ builder.Services
 
 WebApplication app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -30,6 +34,9 @@ if (app.Environment.IsDevelopment())
     await app.ApplyMigrations();
     await app.SeedInitialDataAsync();
 }
+
+
+app.UseCors();
 
 app.MapEndpoints();
 

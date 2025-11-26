@@ -1,0 +1,71 @@
+﻿@page "/login"
+@using MicroStock.Web.Authentication
+@inject HttpClient Http
+@inject ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Navigation
+
+<h3>Login</h3>
+
+<EditForm Model="user" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label>Email</label>
+        <InputText @bind-Value="user.Email" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Password</label>
+        <InputText @bind-Value="user.Password" type="password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="alert alert-danger mt-3">@message</div>
+    }
+</EditForm>
+
+@code {
+    private UserLoginDto user = new();
+    private string message = string.Empty;
+
+    private async Task HandleLogin()
+    {
+        var result = await Http.PostAsJsonAsync("https://localhost:7051/auth/login", user);
+
+        if (!result.IsSuccessStatusCode)
+        {
+            message = "Login failed: " + await result.Content.ReadAsStringAsync();
+            return;
+        }
+
+        var tokens = await result.Content.ReadFromJsonAsync<AccessTokensDto>();
+        if (tokens?.AccessToken is null)
+        {
+            message = "Invalid response from server.";
+            return;
+        }
+
+        // CRITICAL: Use the key must be "token" (exact match!)
+        // Use SetItemAsStringAsync so quotes are preserved correctly
+        await LocalStorage.SetItemAsStringAsync("token", tokens.AccessToken);
+        await LocalStorage.SetItemAsStringAsync("refresh-token", tokens.RefreshToken);
+
+        // This is the MOST IMPORTANT line — forces instant UI update!
+        (AuthStateProvider as CustomAuthStateProvider)?.NotifyUserChanged();
+
+        // Optional: redirect to home
+        Navigation.NavigateTo("/");
+    }
+
+    public class UserLoginDto
+    {
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+
+    public class AccessTokensDto
+    {
+        public string AccessToken { get; set; } = string.Empty;
+        public string RefreshToken { get; set; } = string.Empty;
+    }
+}

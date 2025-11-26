@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\Users\Modules.Users.Infrastructure\Modules.Users.Infrastructure.csproj" />
+    <ProjectReference Include="..\MicroStock.ServiceDefaults\MicroStock.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

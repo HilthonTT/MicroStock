@@ -15,7 +15,7 @@ internal sealed class GetProfile : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("me", async (
+        app.MapGet("users/me", async (
             IUserContext userContext,
             IQueryHandler<GetUserQuery, UserDto> handler,
             CancellationToken cancellationToken) =>
