@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace MicroStock.Web.Authentication;
 
-public sealed class CustomAuthStateProvider : AuthenticationStateProvider
+internal sealed class CustomAuthStateProvider : AuthenticationStateProvider
 {
     private readonly ILocalStorageService _localStorage;
     private readonly HttpClient _http;
@@ -19,7 +19,7 @@ public sealed class CustomAuthStateProvider : AuthenticationStateProvider
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var token = await _localStorage.GetItemAsStringAsync("token");
+        string? token = await _localStorage.GetItemAsStringAsync("token");
 
         var identity = new ClaimsIdentity();
         _http.DefaultRequestHeaders.Authorization = null;

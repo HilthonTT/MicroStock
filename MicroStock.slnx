@@ -20,6 +20,7 @@
     <Project Path="src/Modules/Users/Modules.Users.Presentation/Modules.Users.Presentation.csproj" Id="122d56a2-9d2b-421c-9266-84f55710912c" />
   </Folder>
   <Folder Name="/src/Web/">
+    <Project Path="src/Web/MicroStock.Web.Infrastructure/MicroStock.Web.Infrastructure.csproj" Id="8ef09907-6529-47c6-bb03-6a3d4efbd5bf" />
     <Project Path="src/Web/MicroStock.Web/MicroStock.Web.csproj" />
   </Folder>
   <Project Path="docker-compose.dcproj">
