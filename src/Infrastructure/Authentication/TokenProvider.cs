@@ -29,7 +29,8 @@ internal sealed class TokenProvider : ITokenProvider
 
         List<Claim> claims =
         [
-            new(JwtRegisteredClaimNames.Sub, tokenRequest.UserId),
+            new(JwtRegisteredClaimNames.Sub, tokenRequest.IdentityId),
+            new(CustomClaims.UserId, tokenRequest.UserId.ToString()),
             new(JwtRegisteredClaimNames.Email, tokenRequest.Email),
             ..tokenRequest.Roles.Select(role => new Claim(ClaimTypes.Role, role))
         ];

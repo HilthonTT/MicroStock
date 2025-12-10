@@ -7,4 +7,6 @@ internal sealed class UserContext(IHttpContextAccessor httpContextAccessor) : IU
 {
     public string IdentityId =>
         httpContextAccessor.HttpContext?.User.GetIdentityId() ?? string.Empty;
+
+    public Guid UserId => httpContextAccessor.HttpContext?.User.GetUserId() ?? Guid.Empty;
 }
