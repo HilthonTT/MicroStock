@@ -1,7 +1,7 @@
 ﻿namespace Persistence.Database;
 
-internal static class Schemas
+public static class Schemas
 {
-    internal const string Application = "app";
-    internal const string Identity = "identity";
+    public const string Application = "app";
+    public const string Identity = "identity";
 }

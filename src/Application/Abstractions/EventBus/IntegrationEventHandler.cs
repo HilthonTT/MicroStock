@@ -1,0 +1,10 @@
+﻿namespace Application.Abstractions.EventBus;
+
+public abstract class IntegrationEventHandler<TIntegrationEvent> : IIntegrationEventHandler<TIntegrationEvent>
+    where TIntegrationEvent : IIntegrationEvent
+{
+    public Task Handle(IIntegrationEvent integrationEvent, CancellationToken cancellationToken = default) =>
+        Handle((TIntegrationEvent)integrationEvent, cancellationToken);
+
+    public abstract Task Handle(TIntegrationEvent integrationEvent, CancellationToken cancellationToken = default);
+}
