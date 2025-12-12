@@ -4,6 +4,7 @@
     <Project Path="src/Domain/Domain.csproj" />
     <Project Path="src/Infrastructure/Infrastructure.csproj" />
     <Project Path="src/Persistence/Persistence.csproj" />
+    <Project Path="src/Presentation/Presentation.csproj" Id="7cc024a0-3c06-40cd-998d-4b1cafd69bf3" />
     <Project Path="src/SharedKernel/SharedKernel.csproj" />
   </Folder>
 </Solution>
