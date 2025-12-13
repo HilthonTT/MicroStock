@@ -1,9 +1,10 @@
-﻿using Domain.Entities;
+﻿using Application.Abstractions.Data;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Database;
 
-public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options), IDbContext
 {
     public DbSet<User> Users { get; set; }
 

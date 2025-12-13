@@ -9,7 +9,10 @@ public sealed class RefreshToken : Entity
 {
     public Guid Id { get; private set; }
 
-    public Guid UserId { get; private set; }
+    /// <summary>
+    /// Identity User ID
+    /// </summary>
+    public string UserId { get; private set; }
 
     public string Token { get; private set; } = string.Empty;
 
@@ -30,7 +33,7 @@ public sealed class RefreshToken : Entity
     {
     }
 
-    public static RefreshToken Create(Guid userId, string token, DateTime expiresAtUtc)
+    public static RefreshToken Create(string userId, string token, DateTime expiresAtUtc)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(token);
 
@@ -59,5 +62,11 @@ public sealed class RefreshToken : Entity
     public bool IsValid()
     {
         return !IsRevoked && ExpiresAtUtc > DateTime.UtcNow;
+    }
+
+    public void Refresh(string token, DateTime expiresAtUtc)
+    {
+        Token = token;
+        ExpiresAtUtc = expiresAtUtc;
     }
 }

@@ -1,11 +1,13 @@
-﻿using Domain.Entities;
+﻿using Application.Abstractions.Data;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Database;
 
-public sealed class ApplicationIdentityDbContext(DbContextOptions<ApplicationIdentityDbContext> options) : IdentityDbContext(options)
+public sealed class ApplicationIdentityDbContext(DbContextOptions<ApplicationIdentityDbContext> options) 
+    : IdentityDbContext(options), IIdentityDbContext
 {
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 

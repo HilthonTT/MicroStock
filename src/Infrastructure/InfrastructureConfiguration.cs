@@ -1,4 +1,6 @@
-﻿using Application.Abstractions.EventBus;
+﻿using Application.Abstractions.Authentication;
+using Application.Abstractions.Data;
+using Application.Abstractions.EventBus;
 using Application.Abstractions.Messaging;
 using Infrastructure.Authentication;
 using Infrastructure.Cors;
@@ -68,6 +70,8 @@ public static class InfrastructureConfiguration
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtAuthOptions.Key))
             };
         });
+
+        services.AddScoped<IIdentityDbContext>(sp => sp.GetRequiredService<ApplicationIdentityDbContext>());
 
         services.AddAuthorization();
 

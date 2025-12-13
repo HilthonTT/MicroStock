@@ -1,6 +1,6 @@
-﻿namespace Infrastructure.Authentication;
+﻿namespace Application.Abstractions.Authentication;
 
-internal sealed class JwtAuthOptions
+public sealed class JwtAuthOptions
 {
     public required string Issuer { get; init; }
 

@@ -1,7 +1,6 @@
 ﻿using Application.Abstractions.Data;
 using Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Persistence.Auditing;
@@ -28,6 +27,8 @@ public static class PersistenceConfiguration
         services.AddSingleton<InsertOutboxMessagesInterceptor>();
 
         services.AddDbContext<ApplicationDbContext>(Postgres.StandardOptions(databaseConnectionString, Schemas.Application));
+        services.AddScoped<IDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
+
         services.AddScoped<IUserRepository, UserRepository>();
 
         return services;

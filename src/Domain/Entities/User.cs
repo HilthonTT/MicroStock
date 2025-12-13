@@ -15,6 +15,8 @@ public sealed class User : Entity
 
     public string Email { get; private set; } = string.Empty;
 
+    public bool EmailVerified { get; private set; }
+
     public DateTime CreatedAtUtc { get; private set; }
 
     public DateTime? UpdatedAtUtc { get; private set; }
@@ -62,6 +64,12 @@ public sealed class User : Entity
         ArgumentException.ThrowIfNullOrWhiteSpace(email);
 
         Email = email;
+        UpdatedAtUtc = DateTime.UtcNow;
+    }
+
+    public void VerifyEmail()
+    {
+        EmailVerified = true;
         UpdatedAtUtc = DateTime.UtcNow;
     }
 }
